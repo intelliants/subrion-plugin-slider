@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin name="slider">
+	<title>Slider</title>
+	<summary>This plugin adds an easy way to manage slides on your website</summary>
+	<author>Intelliants LLC</author>
+	<contributor>Intelliants LLC</contributor>
+	<version>3.4.0</version>
+	<date>2015-10-08</date>
+	<compatibility>3.4</compatibility>
+
+	<actions>
+		<action name="slider_view" url="slider/" icon="list" order="1" pages="slider">View</action>
+		<action name="slider_add" url="slider/add/" icon="plus" order="2" pages="slider">Add</action>
+		<action name="slider_positions" url="slider/blocks/" icon="tools" order="2" pages="slider" filename="config">Blocks</action>
+	</actions>
+
+	<adminpages>
+		<page name="slider" url="slider/" filename="index" menus="menu">Slider</page>
+		<page name="slider" url="slider/blocks/" filename="config">Slider Blocks</page>
+	</adminpages>
+
+	<permissions>
+		<object id="slider" action="add" access="1">Add Slide</object>
+	</permissions>
+
+	<configgroup name="slider">Slider</configgroup>
+
+	<config group="slider" type="divider" name="slider_plugin">General</config>
+	<config group="slider" type="radio" name="pause_on_hover" description="Pause slider on hover">1</config>
+	<config group="slider" type="radio" name="slider_responsive" description="Responsive slider">1</config>
+	<config group="slider" type="text" name="items_per_slide" description="Number of displayed items per slide">1</config>
+	<config group="slider" type="radio" name="slider_direction_nav" description="Show slider direction controls">1</config>
+	<config group="slider" type="radio" name="slider_pagination_nav" description="Show slider pagination controls">1</config>
+	<config group="slider" type="radio" name="slider_caption" description="Show images caption">1</config>
+	<config group="slider" type="radio" name="slider_caption_hover" description="Show caption on hover">1</config>
+	<config group="slider" type="radio" name="slider_custom_url" description="Open custom URL on click">0</config>
+
+	<config group="slider" type="divider" name="slider_plugin3">Dimensions</config>
+	<config group="slider" type="text" name="slider_width" description="Slider width">100%</config>
+	<config group="slider" type="text" name="slider_height" description="Slider height">300</config>
+	<config group="slider" type="text" name="slider_thumb_w" description="Slide image width">1200</config>
+	<config group="slider" type="text" name="slider_thumb_h" description="Slide image height">400</config>
+
+	<config group="slider" type="divider" name="slider_plugin2">Effects</config>
+	<config group="slider" type="select" name="slider_direction" description="Slider direction" values="left,right">left</config>
+	<config group="slider" type="select" name="slider_fx" description="Slider FX" values="scroll,directscroll,fade,crossfade,cover,cover-fade,uncover,uncover-fade">scroll</config>
+	<config group="slider" type="select" name="slider_easing" description="Slider easing" values="linear,swing,quadratic,cubic,elastic">linear</config>
+	<config group="slider" type="text" name="slider_scroll_duration" description="Slider scroll duration">500</config>
+
+	<phrases>
+		<phrase category="admin" key="slider">Slider</phrase>
+		<phrase category="admin" key="edit_slide">Edit Slide</phrase>
+		<phrase category="admin" key="add_slide_notification"><![CDATA[Please make sure the slider is <a href=":slider_config_url">configured</a> properly and images you are going to upload have the same width and height. Otherwise it may cause undesirable problems.]]></phrase>
+		<phrase category="admin" key="are_you_sure_to_delete_selected_slide">Are you sure you want to delete this slide?</phrase>
+		<phrase category="admin" key="are_you_sure_to_delete_selected_slides">Are you sure you want to delete these slides?</phrase>
+		<phrase category="admin" key="add_slider_block">Add block</phrase>
+		<phrase category="admin" key="no_slider_blocks">No blocks for this position</phrase>
+		<phrase category="admin" key="items_per_slide">Items per slide</phrase>
+		<phrase category="admin" key="slider_width">Slider Width</phrase>
+		<phrase category="admin" key="slider_height">Slider Height</phrase>
+		<phrase category="admin" key="slider_thumb_w">Slide image width</phrase>
+		<phrase category="admin" key="slider_thumb_h">Slide image height</phrase>
+		<phrase category="admin" key="slider_block">Slider Block</phrase>
+		<phrase category="admin" key="please_create_slider_block"><![CDATA[You should create at least one slider block first <a href=":configurl">HERE</a>]]></phrase>
+		<phrase category="admin" key="sure_delete_block"><![CDATA[Are you sure you want to delete this block?]]></phrase>
+		<phrase category="admin" key="slider_direction">Slider direction</phrase>
+		<phrase category="admin" key="slider_fx">Slider FX</phrase>
+		<phrase category="admin" key="slider_easing">Slider easing</phrase>
+		<phrase category="admin" key="slider_scroll_duration">Slider scroll duration</phrase>
+		<phrase category="admin" key="slider_direction_nav">Show slider direction controls</phrase>
+		<phrase category="admin" key="slider_pagination_nav">Show slider pagination controls</phrase>
+		<phrase category="admin" key="slider_caption">Show images caption</phrase>
+		<phrase category="admin" key="slider_caption_hover">Show caption on hover</phrase>
+		<phrase category="admin" key="slider_custom_url">Open custom URL on click</phrase>
+
+		<phrase category="common" key="slide_added">Slide has been added.</phrase>
+		<phrase category="common" key="Slide">Slider</phrase>
+		<phrase category="common" key="view_slide">View Slider</phrase>
+		<phrase category="common" key="add_slide">Add Slide</phrase>
+	</phrases>
+
+	<tooltips>
+		<tooltip key="slider_responsive"><![CDATA[If 'on', the items will be resized to fill the carousel.]]></tooltip>
+		<tooltip key="slider_fx"><![CDATA[Which effect to use for the transition.]]></tooltip>
+		<tooltip key="slider_scroll_duration"><![CDATA[Determines the duration of the transition in milliseconds.]]></tooltip>
+	</tooltips>
+
+	<hooks>
+		<hook name="phpCoreBeforePageDisplay" page_type="front">
+			<![CDATA[
+if (iaView::REQUEST_HTML == $iaView->getRequestType())
+{
+	$iaSlider = $iaCore->factoryPlugin('slider', iaCore::FRONT);
+
+	$sliders = $iaSlider->getSliders();
+	$sliderPositions = $iaSlider->getPositions();
+
+	$iaView->assign('sliders', $sliders);
+	$iaView->assign('slider_positions', $sliderPositions);
+
+	// include custom css
+	$iaView->add_css('_IA_URL_plugins/slider/templates/front/css/style');
+}
+			]]>
+		</hook>
+	</hooks>
+
+	<install>
+		<sql>
+			<![CDATA[
+CREATE TABLE IF NOT EXISTS `{prefix}slider` (
+	`id` int(4) NOT NULL auto_increment,
+	`name` varchar(150) NOT NULL,
+	`body` text NOT NULL,
+	`url` tinytext NOT NULL,
+	`image` tinytext NOT NULL,
+	`order` varchar(3) NOT NULL,
+	`position` varchar(20) NOT NULL,
+	`status` enum('inactive','active') NOT NULL default 'inactive',
+	`lang` varchar(2) NOT NULL,
+	PRIMARY KEY (`id`)
+) {mysql_version};
+			]]>
+		</sql>
+
+		<sql>
+			<![CDATA[
+CREATE TABLE `{prefix}slider_block_options` (
+	`id` mediumint(7) unsigned NOT NULL auto_increment,
+	`block_id` smallint(5) unsigned NOT NULL,
+	`items_per_slide` varchar(5) NOT NULL,
+	`slider_width` varchar(6) NOT NULL,
+	`slider_height` varchar(6) NOT NULL,
+	`slider_thumb_w` varchar(6) NOT NULL,
+	`slider_thumb_h` varchar(6) NOT NULL,
+	`slider_direction` varchar(20) NOT NULL,
+	`slider_fx` varchar(20) NOT NULL,
+	`slider_easing` varchar(20) NOT NULL,
+	`slider_scroll_duration` varchar(6) NOT NULL,
+	`slider_direction_nav` tinyint(1) NOT NULL,
+	`slider_pagination_nav` tinyint(1) NOT NULL,
+	`slider_caption` tinyint(1) NOT NULL,
+	`slider_caption_hover` tinyint(1) NOT NULL,
+	`slider_custom_url` tinyint(1) NOT NULL,
+	PRIMARY KEY (`id`)
+) {mysql_version};
+		]]>
+		</sql>
+	</install>
+
+	<uninstall>
+		<sql>
+			<![CDATA[
+DROP TABLE IF EXISTS `{prefix}slider`, `{prefix}slider_block_options`;
+			]]>
+		</sql>
+	</uninstall>
+</plugin>

@@ -18,4 +18,13 @@ class iaSlider extends abstractPlugin
 
 		return explode(',', $options);
 	}
+
+	public function delete($id)
+	{
+		$image = $this->_iaDb->one('image', iaDb::convertIds($id));
+		$iaPicture = $this->iaCore->factory('picture');
+		$iaPicture->delete($image);
+
+		return parent::delete($id);
+	}
 }

@@ -21,19 +21,39 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType())
 			}
 
 			$output = $iaSlider->gridRead($_GET,
-				array('name', 'body', 'image', 'order', 'status'),
+				array('image', 'order', 'status'),
 				array('status' => 'equal'),
 				$params
 			);
 
+			foreach ($output['data'] as & $item)
+			{
+				$name = iaLanguage::get('slider_name_' . $item['id']);
+				$item['name'] = isset($name) && $name ? $name : iaLanguage::get('empty');
+			}
+
 			break;
 
 		case iaCore::ACTION_EDIT:
-			$output = $iaSlider->gridUpdate($_POST);
+			if (isset($_POST['name']))
+			{
+				$output['result'] = iaLanguage::addPhrase('slider_name_' . $_POST['id'][0], $_POST['name'], $iaView->language, 'slider');
+				$output['message'] = iaLanguage::get('saved');
+				unset($_POST['name']);
+			}
+			else
+			{
+				$output = $iaSlider->gridUpdate($_POST);
+			}
 
 			break;
 
 		case iaCore::ACTION_DELETE:
+			foreach ($_POST['id'] as $id)
+			{
+				iaLanguage::delete('slider_name_' . $id);
+				iaLanguage::delete('slider_body_' . $id);
+			}
 			$output = $iaSlider->gridDelete($_POST);
 	}
 
@@ -46,23 +66,21 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		$id = 0;
 		$slides = array(
-			'lang' => $iaView->language,
 			'status' => iaCore::STATUS_ACTIVE,
 		);
 
 		iaBreadcrumb::replaceEnd(iaLanguage::get($pageAction . '_slide'), IA_ADMIN_URL . 'slider/' . $pageAction);
 
 		$iaDb->setTable('blocks');
-		$sql = "
-			SELECT bl.*, COUNT(bn.`id`) as bn_col, opt.`slider_width`, opt.`slider_height`
-			  FROM `{$iaDb->prefix}blocks` as bl
-			LEFT JOIN `{$iaDb->prefix}slider_block_options` as opt
-			  ON bl.`id` = opt.`block_id`
-			LEFT JOIN `{$iaDb->prefix}slider` as bn
-			  ON bn.`position` = bl.`id`
-			WHERE bl.`extras` = 'slider'
-			GROUP BY bl.`id`
-		";
+		$sql = "SELECT bl.*, COUNT(bn.`id`) as bn_col, opt.`slider_width`, opt.`slider_height` " .
+				"FROM `{$iaDb->prefix}blocks` as bl " .
+				"LEFT JOIN `{$iaDb->prefix}slider_block_options` as opt " .
+				"ON bl.`id` = opt.`block_id` " .
+				"LEFT JOIN `{$iaDb->prefix}slider` as bn " .
+				"ON bn.`position` = bl.`id` " .
+				"WHERE bl.`extras` = 'slider' " .
+				"GROUP BY bl.`id`";
+
 		$positions = $iaDb->getAll($sql);
 		$iaDb->resetTable();
 
@@ -72,10 +90,15 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 			$iaView->setMessages($no_positions, 'info');
 		}
 
-		if ('edit' == $pageAction)
+		if (iaCore::ACTION_EDIT == $pageAction)
 		{
 			$id = isset($iaCore->requestPath[0]) ? (int)$iaCore->requestPath[0] : 0;
 			$slides = $iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds($id));
+			$iaDb->setTable(iaLanguage::getTable());
+			$slides['names'] = $iaDb->keyvalue(array('code', 'value'), iaDb::convertIds('slider_name_' . $id, 'key') . " AND `extras` = 'slider'");
+			$slides['bodies'] = $iaDb->keyvalue(array('code', 'value'), iaDb::convertIds('slider_body_' . $id, 'key') . " AND `extras` = 'slider'");
+			$iaDb->resetTable();
+
 			if (!$slides)
 			{
 				return iaView::errorPage(iaView::ERROR_NOT_FOUND);
@@ -89,12 +112,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 		$slides = array(
 			'id' => isset($id) ? $id : 0,
-			'name' => iaUtil::checkPostParam('name', $slides),
-			'lang' => iaUtil::checkPostParam('lang', $slides),
+			'names' => iaUtil::checkPostParam('names', $slides),
 			'url' => iaUtil::checkPostParam('url', $slides),
 			'image' => iaUtil::checkPostParam('image', $slides),
 			'position' => iaUtil::checkPostParam('position', $slides),
-			'body' => iaUtil::checkPostParam('body', $slides),
+			'bodies' => iaUtil::checkPostParam('bodies', $slides),
 			'order' => iaUtil::checkPostParam('order', $slides),
 			'status' => iaUtil::checkPostParam('status', $slides)
 		);
@@ -108,18 +130,24 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 			$messages = array();
 
 			$slides['status'] = in_array($slides['status'], array(iaCore::STATUS_ACTIVE, iaCore::STATUS_APPROVAL)) ? $slides['status'] : iaCore::STATUS_APPROVAL;
-			$slides['lang'] = array_key_exists($slides['lang'], $iaCore->languages) ? $slides['lang'] : $iaView->language;
 			$slides['url'] = !empty($slides['url']) && 'http://' != substr($slides['url'], 0, 7) ? 'http://' . $slides['url'] : $slides['url'];
-			$slides['body'] = iaUtil::safeHTML($slides['body']);
-			$slides['name'] = iaSanitize::html($slides['name']);
-			$slides['url'] = iaSanitize::html($slides['url']);
-			$slides['order'] = iaSanitize::html($slides['order']);
 
-			if (empty($slides['name']))
+			foreach ($slides['bodies'] as & $body)
 			{
-				$error = true;
-				$messages[] = iaLanguage::get('incorrect_fullname');
+				$body = iaUtil::safeHTML($body);
 			}
+
+			foreach ($slides['names'] as $code => & $name)
+			{
+				$name = iaSanitize::html($name);
+				if (empty($name))
+				{
+					$error = true;
+					$messages[] = iaLanguage::get('name_is_empty_for') . $iaCore->languages[$code]['title'];
+					break;
+				}
+			}
+			$slides['url'] = iaSanitize::html($slides['url']);
 
 			if (!empty($slides['url']) && !iaValidate::isUrl($slides['url']))
 			{
@@ -128,42 +156,67 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 			}
 
 			$img = isset($_FILES['image']) && !empty($_FILES['image']['name']) ? $_FILES['image'] : false;
+			if (!$img && iaCore::ACTION_ADD == $pageAction)
+			{
+				$error = true;
+				$messages[] = iaLanguage::get('invalid_image_file');
+			}
+
+			$names = $slides['names'];
+			$bodies = $slides['bodies'];
+			unset($slides['names'], $slides['bodies']);
+
+			if ($img)
+			{
+				$image = 'slides/';
+				$tok = iaUtil::generateToken();
+				$iaPicture = $iaCore->factory('picture');
+
+				$side = ($iaCore->get('slider_thumb_w') > $iaCore->get('slider_thumb_h'))
+					? $iaCore->get('slider_thumb_w')
+					: $iaCore->get('slider_thumb_h');
+
+				$imageInfo = array(
+					'image_width' => $side,
+					'image_height' => $side,
+					'thumb_width' => 200,
+					'thumb_height' => 150,
+					'resize_mode' => 'fit'
+				);
+
+				$imgSize = getimagesize($img['tmp_name']);
+
+				$slides['image'] = $iaPicture->processImage($img, $image, $tok, $imageInfo);
+			}
+
+			if (iaCore::ACTION_EDIT == $pageAction && !$error)
+			{
+				$slides['id'] = $id;
+				$result = $iaDb->update($slides);
+				$error = (0 === $result || $result) ? false : true;
+				$messages[] = ($error) ? iaLanguage::get('db_error') : iaLanguage::get('saved');
+			}
+			elseif (!$error)
+			{
+				$result = $id = $iaDb->insert($slides);
+				$error = ($result) ? false : true;
+				$messages[] = ($error) ? iaLanguage::get('db_error') : iaLanguage::get('slide_added');
+			}
+
+			$slides['names'] = $names;
+			$slides['bodies'] = $bodies;
 
 			if (!$error)
 			{
-				if ($img)
+				$fieldname = 'name';
+				foreach (array('names', 'bodies') as $array)
 				{
-					$image = 'slides/';
-					$tok = iaUtil::generateToken();
-					$iaPicture = $iaCore->factory('picture');
-
-					$side = ($iaCore->get('slider_thumb_w') > $iaCore->get('slider_thumb_h'))
-						? $iaCore->get('slider_thumb_w')
-						: $iaCore->get('slider_thumb_h');
-
-					$imageInfo = array(
-						'image_width' => $side,
-						'image_height' => $side,
-						'thumb_width' => 200,
-						'thumb_height' => 150,
-						'resize_mode' => 'fit'
-					);
-
-					$imgSize = getimagesize($img['tmp_name']);
-
-					$slides['image'] = $iaPicture->processImage($img, $image, $tok, $imageInfo);
-				}
-
-				if (iaCore::ACTION_EDIT == $pageAction)
-				{
-					$slides['id'] = $id;
-					$iaDb->update($slides);
-					$messages[] = iaLanguage::get('saved');
-				}
-				else
-				{
-					$id = $iaDb->insert($slides);
-					$messages[] = iaLanguage::get('slide_added');
+					foreach ($$array as $code => $field)
+					{
+						$key = 'slider_' . $fieldname . '_' . $id;
+						iaLanguage::addPhrase($key, $field, $code, 'slider');
+					}
+					$fieldname = 'body';
 				}
 
 				$iaView->setMessages($messages, 'success');

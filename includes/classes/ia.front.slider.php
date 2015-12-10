@@ -19,6 +19,8 @@ class iaSlider extends abstractPlugin
 			$sliders = array();
 			foreach ($rows as $entry)
 			{
+				$entry['name'] = iaLanguage::get('slider_name_' . $entry['id']);
+				$entry['body'] = iaLanguage::get('slider_body_' . $entry['id']);
 				$sliders[$entry['position']][] = $entry;
 			}
 

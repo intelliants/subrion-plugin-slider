@@ -7,17 +7,6 @@
 				<div class="wrap-group-heading">
 					<h4>{lang key='options'}</h4>
 				</div>
-				
-				<div class="row">
-					<label class="col col-lg-2 control-label" for="input-language">{lang key='language'} <span class="required">*</span></label>
-					<div class="col col-lg-4">
-						<select name="lang" id="input-language"{if count($core.languages) == 1} disabled="disabled"{/if}>
-						{foreach $core.languages as $code => $language}
-							<option value="{$code}"{if $slides.lang == $code} selected="selected"{/if}>{$language.title}</option>
-						{/foreach}
-						</select>
-					</div>
-				</div>
 
 				<div class="row">
 					<label class="col col-lg-2 control-label" for="js-slider-position">{lang key='slider_block'} <span class="required">*</span></label>
@@ -30,13 +19,6 @@
 								</option>
 							{/foreach}
 						</select>
-					</div>
-				</div>
-
-				<div class="row">
-					<label class="col col-lg-2 control-label" for="input-name">{lang key='name'} <span class="required">*</span></label>
-					<div class="col col-lg-4">
-						<input type="text" name="name" value="{$slides.name|escape:'html'}" id="input-name">
 					</div>
 				</div>
 
@@ -63,16 +45,41 @@
 				</div>
 
 				<div class="row">
-					<label class="col col-lg-2 control-label" for="body">{lang key='body'}</label>
-					<div class="col col-lg-8">
-						{ia_wysiwyg name='body' value=$slides.body}
+					<ul class="nav nav-tabs">
+						{foreach $core.languages as $code => $language}
+							<li{if $language@iteration == 1} class="active"{/if}><a href="#tab-language-{$code}" data-toggle="tab" data-language="{$code}">{$language.title}</a></li>
+						{/foreach}
+					</ul>
+
+					<div class="tab-content">
+						{foreach $core.languages as $code => $language}
+							<div class="tab-pane{if $language@first} active{/if}" id="tab-language-{$code}">
+								<div class="row">
+									<label class="col col-lg-2 control-label">{lang key='name'} <span class="required">*</span></label>
+									<div class="col col-lg-4">
+										<input type="text" name="names[{$code}]" value="{if isset($slides.names) && is_array($slides.names)}{$slides.names.$code|escape:'html'}{/if}">
+									</div>
+								</div>
+								<div class="row js-local-url-field">
+									<label class="col col-lg-2 control-label">{lang key='body'}</label>
+									<div class="col col-lg-8">
+										{if isset($slides.bodies) && is_array($slides.bodies)}
+											{assign value $slides.bodies.$code}
+										{else}
+											{assign value ''}
+										{/if}
+										{ia_wysiwyg name="bodies[{$code}]" value=$value}
+									</div>
+								</div>
+							</div>
+						{/foreach}
 					</div>
 				</div>
 
 				<div class="row">
 					<label class="col col-lg-2 control-label" for="input-order">{lang key='order'}</label>
 					<div class="col col-lg-4">
-						<input type="text" name="order" value="{$slides.order|escape:'html'}" id="input-order">
+						<input type="number" name="order" value="{$slides.order}" id="input-order">
 					</div>
 				</div>
 

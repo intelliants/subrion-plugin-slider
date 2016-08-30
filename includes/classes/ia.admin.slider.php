@@ -44,7 +44,7 @@ class iaSlider extends abstractPlugin
 
 	public function delete($id)
 	{
-		$image = $this->_iaDb->one('image', iaDb::convertIds($id));
+		$image = $this->iaDb->one('image', iaDb::convertIds($id));
 		$iaPicture = $this->iaCore->factory('picture');
 		$iaPicture->delete($image);
 

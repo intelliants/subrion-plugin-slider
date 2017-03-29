@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<plugin name="slider">
+<module type="plugin" name="slider">
 	<title>Slider</title>
 	<summary>This plugin adds an easy way to manage slides on your website</summary>
 	<author>Intelliants LLC</author>
 	<contributor>Intelliants LLC</contributor>
-	<version>4.0.0</version>
-	<date>2016-01-05</date>
-	<compatibility>4.0</compatibility>
+	<version>4.1.0</version>
+	<date>2017-03-29</date>
+	<compatibility>4.1</compatibility>
 
 	<actions>
 		<action name="slider_view" url="slider/" icon="list" order="1" pages="slider">View</action>
@@ -36,10 +36,10 @@
 	<config group="slider" type="radio" name="slider_custom_url" description="Open custom URL on click">0</config>
 
 	<config group="slider" type="divider" name="slider_plugin3">Dimensions</config>
-	<config group="slider" type="text" name="slider_width" description="Slider width">100%</config>
-	<config group="slider" type="text" name="slider_height" description="Slider height">300</config>
-	<config group="slider" type="text" name="slider_thumb_w" description="Slide image width">1200</config>
-	<config group="slider" type="text" name="slider_thumb_h" description="Slide image height">400</config>
+	<config group="slider" type="text" name="slider_width" description="Slider width">800</config>
+	<config group="slider" type="text" name="slider_height" description="Slider height">600</config>
+	<config group="slider" type="text" name="slider_thumb_w" description="Slide image width">360</config>
+	<config group="slider" type="text" name="slider_thumb_h" description="Slide image height">360</config>
 
 	<config group="slider" type="divider" name="slider_plugin2">Effects</config>
 	<config group="slider" type="select" name="slider_direction" description="Slider direction" values="left,right">left</config>
@@ -100,7 +100,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	$iaView->assign('slider_positions', $sliderPositions);
 
 	// include custom css
-	$iaView->add_css('_IA_URL_plugins/slider/templates/front/css/style');
+	$iaView->add_css('_IA_URL_modules/slider/templates/front/css/style');
 }
 			]]>
 		</hook>
@@ -153,4 +153,4 @@ DROP TABLE IF EXISTS `{prefix}slider`, `{prefix}slider_block_options`;
 			]]>
 		</sql>
 	</uninstall>
-</plugin>
+</module>

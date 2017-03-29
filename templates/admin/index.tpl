@@ -27,8 +27,8 @@
 					<div class="col col-lg-4">
 						{if isset($slides.image) && !empty($slides.image)}
 							<div class="input-group thumbnail thumbnail-single with-actions">
-								<a href="{printImage imgfile=$slides.image fullimage=true url=true}" rel="ia_lightbox">
-									{printImage imgfile=$slides.image}
+								<a href="{ia_image file=$slides.image type='large' url=true}" rel="ia_lightbox">
+									{ia_image file=$slides.image}
 								</a>
 							</div>
 						{/if}

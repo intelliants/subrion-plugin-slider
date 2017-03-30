@@ -10,13 +10,13 @@
 
 	<actions>
 		<action name="slider_view" url="slider/" icon="list" order="1" pages="slider">View</action>
-		<action name="slider_add" url="slider/add/" icon="plus" order="2" pages="slider">Add</action>
+		<action name="add_slider" url="slider/add/" icon="plus" order="2" pages="slider">Add</action>
 		<action name="slider_positions" url="slider/blocks/" icon="tools" order="2" pages="slider" filename="config">Blocks</action>
 	</actions>
 
 	<adminpages>
 		<page name="slider" url="slider/" filename="index" menus="menu">Slider</page>
-		<page name="slider" url="slider/blocks/" filename="config">Slider Blocks</page>
+		<page name="slider_config" url="slider/blocks/" parent="slider" filename="config">Add Block</page>
 	</adminpages>
 
 	<permissions>

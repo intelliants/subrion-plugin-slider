@@ -1,9 +1,8 @@
 <?php
-
 /******************************************************************************
  *
  * Subrion - open source content management system
- * Copyright (C) 2016 Intelliants, LLC <http://www.intelliants.com>
+ * Copyright (C) 2017 Intelliants, LLC <https://intelliants.com>
  *
  * This file is part of Subrion.
  *
@@ -21,9 +20,10 @@
  * along with Subrion. If not, see <http://www.gnu.org/licenses/>.
  *
  *
- * @link http://www.subrion.org/
+ * @link https://subrion.org/
  *
  ******************************************************************************/
+
 class iaSlider extends abstractModuleFront
 {
     protected static $_table = 'slider';

@@ -49,10 +49,6 @@ class iaSlider extends abstractModuleAdmin
         $start = isset($params['start']) ? (int)$params['start'] : 0;
         $limit = isset($params['limit']) ? (int)$params['limit'] : 15;
 
-        $sort = $params['sort'];
-        $dir = in_array($params['dir'], [iaDb::ORDER_ASC, iaDb::ORDER_DESC]) ? $params['dir'] : iaDb::ORDER_ASC;
-        $order = ($sort && $dir) ? "`{$sort}` {$dir}" : 't1.`date` DESC';
-
         $where = $values = [];
         foreach ($filterParams as $name => $type) {
             if (isset($params[$name]) && $params[$name]) {
@@ -74,10 +70,6 @@ class iaSlider extends abstractModuleAdmin
         $where || $where[] = iaDb::EMPTY_CONDITION;
         $where = implode(' AND ', $where);
         $this->iaDb->bind($where, $values);
-
-        if (is_array($columns)) {
-            $columns = array_merge(['id', 'update' => 1, 'delete' => 1], $columns);
-        }
 
         $sql =
             "SELECT SQL_CALC_FOUND_ROWS sl.*, l.`value` as title, bl.name `position_title`, bl.`position` `slider_position`, bl.`id` as `edit_block`, sl.`id` as `update`, 1 as `delete` " .
@@ -136,9 +128,9 @@ class iaSlider extends abstractModuleAdmin
                 'type' => $iaField::IMAGE,
                 'thumb_width' => $this->iaCore->get('slider_thumb_w'),
                 'thumb_height' => $this->iaCore->get('slider_thumb_h'),
-                'image_width' => $this->iaCore->get('slider_height'),
+                'image_width' => $this->iaCore->get('slider_width'),
                 'image_height' => $this->iaCore->get('slider_height'),
-                'resize_mode' => $iaPicture::FIT,
+                'resize_mode' => $iaPicture::CROP,
                 'folder_name' => 'slides',
                 'file_prefix' => 'slide_'
             ];

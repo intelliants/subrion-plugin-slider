@@ -14,8 +14,8 @@ Ext.onReady(function()
 				{name: 'order', title: _t('order'), editor: 'number'},
 				'status',
 				{name: 'image', width: 35, sortable: false, renderer: function(value) {
-						var fullimage = value.replace(/\.(\w+)$/i, "~.$1");
-						return '<a href="' + intelli.config.ia_url + 'uploads/' + fullimage + '" rel="ia_lightbox[slider]"><i class="i-eye grid-icon" style="text" title="' + _t('view') + '"></i></a>';
+						var fullimage = value.split('|');
+						return '<a href="' + intelli.config.ia_url + 'uploads/' + fullimage[0] + 'large/' + fullimage[1] + '" rel="ia_lightbox[slider]"><i class="i-eye grid-icon" style="text" title="' + _t('view') + '"></i></a>';
 					}
 				},
 				'update',

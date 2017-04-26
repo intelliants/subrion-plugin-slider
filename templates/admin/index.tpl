@@ -57,7 +57,7 @@
                                 <div class="row">
                                     <label class="col col-lg-2 control-label">{lang key='name'} <span class="required">*</span></label>
                                     <div class="col col-lg-4">
-                                        <input type="text" name="names[{$code}]" value="{if isset($slides.names) && is_array($slides.names)}{$slides.names.$code|escape:'html'}{/if}">
+                                        <input type="text" name="names[{$code}]" value="{if isset($slides.names) && is_array($slides.names)}{$slides.names.$code|escape}{/if}">
                                     </div>
                                 </div>
                                 <div class="row js-local-url-field">

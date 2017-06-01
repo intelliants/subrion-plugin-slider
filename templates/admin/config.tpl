@@ -1,5 +1,5 @@
 <div class="wrap-list">
-    {foreach $positions as $position name="positions_foreach"}
+    {foreach $positions as $position name='positions_foreach'}
         <fieldset class="wrap-group" id="position-{$position}">
             <div class="wrap-group-heading">
                 <h4>{$position}</h4>

@@ -4,8 +4,8 @@
     <summary>This plugin adds an easy way to manage slides on your website</summary>
     <author>Intelliants LLC</author>
     <contributor>Intelliants LLC</contributor>
-    <version>4.1.0</version>
-    <date>2017-03-29</date>
+    <version>4.1.1</version>
+    <date>2017-06-01</date>
     <compatibility>4.1</compatibility>
 
     <actions>
@@ -27,7 +27,6 @@
 
     <config group="slider" type="divider" name="slider_plugin">General</config>
     <config group="slider" type="radio" name="pause_on_hover" description="Pause slider on hover">1</config>
-    <config group="slider" type="radio" name="slider_responsive" description="Responsive slider">1</config>
     <config group="slider" type="text" name="items_per_slide" description="Number of displayed items per slide">1</config>
     <config group="slider" type="radio" name="slider_direction_nav" description="Show slider direction controls">1</config>
     <config group="slider" type="radio" name="slider_pagination_nav" description="Show slider pagination controls">1</config>
@@ -81,7 +80,6 @@
     </phrases>
 
     <tooltips>
-        <tooltip key="slider_responsive"><![CDATA[If 'on', the items will be resized to fill the carousel.]]></tooltip>
         <tooltip key="slider_fx"><![CDATA[Which effect to use for the transition.]]></tooltip>
         <tooltip key="slider_scroll_duration"><![CDATA[Determines the duration of the transition in milliseconds.]]></tooltip>
     </tooltips>
@@ -93,9 +91,9 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     $iaSlider = $iaCore->factoryPlugin('slider', iaCore::FRONT);
 
     $sliders = $iaSlider->getSliders();
-    $sliderPositions = $iaSlider->getPositions();
-
     $iaView->assign('sliders', $sliders);
+
+    $sliderPositions = $iaSlider->getPositions();
     $iaView->assign('slider_positions', $sliderPositions);
 
     // include custom css

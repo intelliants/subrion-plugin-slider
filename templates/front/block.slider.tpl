@@ -3,7 +3,7 @@
         <ul class="b-slider__slides" id="slider__slides_{$block.id}">
             {foreach $sliders[$block.id] as $item}
                 <li class="b-slider__item{if $slider_positions[$block.id].slider_caption_hover} b-slider__item--hidden-caption{/if}"{if $slider_positions[$block.id].slider_custom_url} data-url="{$item.url}"{/if} style="width:{$slider_positions[$block.id].slider_thumb_w};height:{$slider_positions[$block.id].slider_thumb_h}">
-                    {ia_image file=$item.image title=$item.name type='large'}
+                    {ia_image file=$item.image title=$item.name type='large' class="{if $core.config.slider_responsive}img-responsive{/if}"}
                     {if $slider_positions[$block.id].slider_caption}
                         <div class="b-slider__item__caption">
                             <h4>{$item.name}</h4>

@@ -72,7 +72,7 @@ class iaSlider extends abstractModuleAdmin
         $this->iaDb->bind($where, $values);
 
         $sql =
-            "SELECT SQL_CALC_FOUND_ROWS sl.*, l.`value` as title, bl.name `position_title`, bl.`position` `slider_position`, bl.`id` as `edit_block`, sl.`id` as `update`, 1 as `delete` " .
+            "SELECT SQL_CALC_FOUND_ROWS DISTINCTROW sl.*, l.`value` as title, bl.name `position_title`, bl.`position` `slider_position`, bl.`id` as `edit_block`, sl.`id` as `update`, 1 as `delete` " .
             "FROM `{$this->iaDb->prefix}slider` sl " .
             "LEFT JOIN `{$this->iaDb->prefix}blocks` bl " .
             "ON sl.`position` = bl.`id` " .
@@ -156,6 +156,6 @@ class iaSlider extends abstractModuleAdmin
     {
         $this->_updateImage($itemData);
 
-        return $this->iaDb->update($itemData, $where, null, self::getTable());
+        return $this->iaDb->update($itemData, iaDb::convertIds($where), null, self::getTable());
     }
 }

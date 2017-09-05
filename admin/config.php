@@ -149,7 +149,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     $iaDb->setTable('blocks');
     foreach ($positions as $pos) {
         $sql = <<<SQL
-SELECT b.*, l.`value` AS `title` FROM `:prefix:table_blocks` b
+SELECT DISTINCTROW  b.*, l.`value` AS `title` FROM `:prefix:table_blocks` b
 LEFT JOIN `:prefix:table_language` l ON (l.`key` = CONCAT("block_title_", b.`id`))
 WHERE b.`position` = ":postition" AND b.`module` = ":module"
 SQL;

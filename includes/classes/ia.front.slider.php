@@ -37,7 +37,7 @@ class iaSlider extends abstractModuleFront
 
     public function getSliders()
     {
-        if ($rows = $this->iaDb->all(iaDb::ALL_COLUMNS_SELECTION, "`status` = 'active'", null, null, self::getTable())) {
+        if ($rows = $this->iaDb->all(iaDb::ALL_COLUMNS_SELECTION, "`status` = 'active' ORDER BY `order`", null, null, self::getTable())) {
             $sliders = [];
             foreach ($rows as $entry) {
                 $entry['name'] = iaLanguage::get('slider_name_' . $entry['id']);

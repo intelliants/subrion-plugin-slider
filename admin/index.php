@@ -144,8 +144,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
             $slides['status'] = in_array($slides['status'],
                 [iaCore::STATUS_ACTIVE, iaCore::STATUS_APPROVAL]) ? $slides['status'] : iaCore::STATUS_APPROVAL;
-            $slides['url'] = !empty($slides['url']) && 'http://' != substr($slides['url'], 0,
-                7) ? 'http://' . $slides['url'] : $slides['url'];
+            $slides['url'] = !empty($slides['url']) && '/' != substr($slides['url'], -1) ? $slides['url'] . '/' : $slides['url'];
 
             foreach ($slides['bodies'] as & $body) {
                 $body = iaUtil::safeHTML($body);
@@ -161,18 +160,13 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             }
             $slides['url'] = iaSanitize::html($slides['url']);
 
-            if (!empty($slides['url']) && !iaValidate::isUrl($slides['url'])) {
-                $error = true;
-                $messages[] = iaLanguage::get('error_url');
-            }
-
             $names = $slides['names'];
             $bodies = $slides['bodies'];
             unset($slides['names'], $slides['bodies']);
 
             if (iaCore::ACTION_EDIT == $pageAction && !$error) {
                 $slides['id'] = $id;
-                $result = $iaSlider->update($slides);
+                $result = $iaSlider->update($slides, $slides['id']);
                 $error = (0 === $result || $result) ? false : true;
                 $messages[] = ($error) ? iaLanguage::get('db_error') : iaLanguage::get('saved');
             } elseif (!$error) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module type="plugin" name="slider">
-    <title>Colo Slider</title>
+    <title>Slider</title>
     <summary>This plugin adds an easy way to manage slides on your website</summary>
     <author>Intelliants LLC</author>
     <contributor>Intelliants LLC</contributor>

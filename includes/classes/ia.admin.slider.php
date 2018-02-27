@@ -38,7 +38,7 @@ class iaSlider extends abstractModuleAdmin
     public function getConfigOptions($name)
     {
         $options = $this->iaDb->one('multiple_values', "`name` = '{$name}' AND `module` = 'slider'",
-            iaCore::getConfigTable());
+            iaConfig::getTable());
 
         return explode(',', $options);
     }

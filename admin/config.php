@@ -24,7 +24,7 @@
  *
  ******************************************************************************/
 
-$iaSlider = $iaCore->factoryModule('slider','slider',iaCore::ADMIN);
+$iaSlider = $iaCore->factoryModule('slider', 'slider', iaCore::ADMIN);
 $iaDb->setTable(iaSlider::getTable());
 
 $allowedAction = ['add_block', 'remove_block', 'save_block'];

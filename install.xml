@@ -88,7 +88,8 @@
         <hook name="phpCoreBeforePageDisplay" page_type="front">
             <![CDATA[
 if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
-    $iaSlider = $iaCore->factoryPlugin('slider', iaCore::FRONT);
+
+    $iaSlider = $iaCore->factoryModule('slider', 'slider', iaCore::FRONT);
 
     $sliders = $iaSlider->getSliders();
     $iaView->assign('sliders', $sliders);
@@ -101,6 +102,10 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 }
             ]]>
         </hook>
+    </hooks>
+
+    <hooks>
+        <hook name="phpCoreBeforePageDisplay" filename="hook.slider.php" page_type="front"><![CDATA[]]></hook>
     </hooks>
 
     <install>

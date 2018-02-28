@@ -60,7 +60,6 @@ Ext.onReady(function () {
             Ext.getCmp('fltStatus').setValue(urlParam);
         }
 
-
         intelli.slider.init();
     }
 });

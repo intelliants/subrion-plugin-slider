@@ -14,9 +14,9 @@ Ext.onReady(function () {
                     'status',
                     {
                         name: 'image', width: 35, sortable: false, renderer: function (value) {
-                        var fullimage = value.split('|');
-                        return '<a href="' + intelli.config.url+ 'uploads/' + fullimage[0] + 'large/' + fullimage[1] + '" rel="ia_lightbox[slider]"><i class="i-eye grid-icon" style="text" title="' + _t('view') + '"></i></a>';
-                    }
+                            var fullimage = value.split('|');
+                            return '<a href="' + intelli.config.url+ 'uploads/' + fullimage[0] + 'large/' + fullimage[1] + '" rel="ia_lightbox[slider]"><i class="i-eye grid-icon" style="text" title="' + _t('view') + '"></i></a>';
+                        }
                     },
                     'update',
                     'delete'

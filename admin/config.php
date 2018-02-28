@@ -25,6 +25,7 @@
  ******************************************************************************/
 
 $iaSlider = $iaCore->factoryModule('slider', 'slider', iaCore::ADMIN);
+
 $iaDb->setTable(iaSlider::getTable());
 
 $allowedAction = ['add_block', 'remove_block', 'save_block'];
@@ -60,6 +61,10 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
             'slider_fx' => isset($_GET['slider_fx']) ? $_GET['slider_fx'] : $iaCore->get('slider_fx'),
             'slider_easing' => isset($_GET['slider_easing']) ? $_GET['slider_easing'] : $iaCore->get('slider_easing'),
             'slider_scroll_duration' => isset($_GET['slider_scroll_duration']) ? $_GET['slider_scroll_duration'] : $iaCore->get('slider_scroll_duration'),
+            'slider_autoplay_timeout' => isset($_GET['slider_autoplay_timeout']) ? $_GET['slider_autoplay_timeout'] : $iaCore->get('slider_autoplay_timeout'),
+            'slider_margin' => isset($_GET['slider_margin']) ? $_GET['slider_margin'] : $iaCore->get('slider_margin'),
+            'slider_autoplay' => isset($_GET['slider_autoplay']) ? $_GET['slider_autoplay'] : $iaCore->get('slider_autoplay'),
+            'slider_loop' => isset($_GET['slider_loop']) ? $_GET['slider_loop'] : $iaCore->get('slider_loop'),
             'slider_direction_nav' => isset($_GET['slider_direction_nav']) ? $_GET['slider_direction_nav'] : $iaCore->get('slider_direction_nav'),
             'slider_pagination_nav' => isset($_GET['slider_pagination_nav']) ? $_GET['slider_pagination_nav'] : $iaCore->get('slider_pagination_nav'),
             'slider_caption' => isset($_GET['slider_caption']) ? $_GET['slider_caption'] : $iaCore->get('slider_caption'),
@@ -92,6 +97,10 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     $configOptions['slider_fx'] = $iaSlider->getConfigOptions('slider_fx');
     $configOptions['slider_easing'] = $iaSlider->getConfigOptions('slider_easing');
     $configOptions['slider_scroll_duration'] = $iaSlider->getConfigOptions('slider_scroll_duration');
+    $configOptions['slider_autoplay_timeout'] = $iaSlider->getConfigOptions('slider_autoplay_timeout');
+    $configOptions['slider_autoplay'] = $iaSlider->getConfigOptions('slider_autoplay');
+    $configOptions['slider_loop'] = $iaSlider->getConfigOptions('slider_loop');
+    $configOptions['slider_margin'] = $iaSlider->getConfigOptions('slider_margin');
 
     if ('add_block' == $configAction && $position) {
         $iaBlock = $iaCore->factory('block', iaCore::ADMIN);
@@ -122,6 +131,10 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             'slider_fx' => $iaCore->get('slider_fx'),
             'slider_easing' => $iaCore->get('slider_easing'),
             'slider_scroll_duration' => $iaCore->get('slider_scroll_duration'),
+            'slider_autoplay_timeout' => $iaCore->get('slider_autoplay_timeout'),
+            'slider_margin' => $iaCore->get('slider_margin'),
+            'slider_autoplay' => $iaCore->get('slider_autoplay'),
+            'slider_loop' => $iaCore->get('slider_loop'),
             'slider_direction_nav' => $iaCore->get('slider_direction_nav'),
             'slider_pagination_nav' => $iaCore->get('slider_pagination_nav'),
             'slider_caption' => $iaCore->get('slider_caption'),

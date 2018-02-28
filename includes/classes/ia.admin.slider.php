@@ -29,6 +29,7 @@ class iaSlider extends abstractModuleAdmin
     protected static $_table = 'slider';
     protected static $_tableBlocks = 'slider_block_options';
 
+
     public static function getTableBlocks()
     {
         return self::$_tableBlocks;
@@ -92,7 +93,7 @@ SQL;
             'start' => $start,
             'limit' => $limit
         ]);
-
+        
         return [
             'data' => $this->iaDb->getAll($sql),
             'total' => (int)$this->iaDb->one(iaDb::STMT_COUNT_ROWS, $where)

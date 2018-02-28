@@ -32,6 +32,10 @@ $(function () {
         params['slider_fx'] = $('.slider_fx', block).val();
         params['slider_easing'] = $('.slider_easing', block).val();
         params['slider_scroll_duration'] = $('.slider_scroll_duration', block).val();
+        params['slider_autoplay_timeout'] = $('.slider_autoplay_timeout', block).val();
+        params['slider_margin'] = $('.slider_margin', block).val();
+        params['slider_autoplay'] = $('#slider_autoplay', block).val();
+        params['slider_loop'] = $('#slider_loop', block).val();
         params['slider_direction_nav'] = $('#slider_direction_nav', block).val();
         params['slider_pagination_nav'] = $('#slider_pagination_nav', block).val();
         params['slider_caption'] = $('#slider_caption', block).val();

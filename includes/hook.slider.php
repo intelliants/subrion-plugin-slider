@@ -35,4 +35,4 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
     // include custom css
     $iaView->add_css('_IA_URL_modules/slider/templates/front/css/style');
-} 
+}

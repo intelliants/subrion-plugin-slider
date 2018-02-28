@@ -42,7 +42,7 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
 
             $output = $iaSlider->gridRead($_GET,
                 ['image', 'order', 'status'],
-                ['status' => 'equal'],
+                ['status' => 'equal', 'title' =>'like'],
                 $params
             );
 

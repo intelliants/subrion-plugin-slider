@@ -45,9 +45,13 @@ class iaSlider extends abstractModuleAdmin
 
     public function gridRead($params, $columns, array $filterParams = [], array $persistentConditions = [])
     {
+
+
         $params || $params = [];
         $start = isset($params['start']) ? (int)$params['start'] : 0;
         $limit = isset($params['limit']) ? (int)$params['limit'] : 15;
+
+        $order = '`' . $params['sort'] . '` ' . $params['dir'];
 
         $where = $values = [];
         foreach ($filterParams as $name => $type) {
@@ -56,11 +60,12 @@ class iaSlider extends abstractModuleAdmin
 
                 switch ($type) {
                     case 'equal':
-                        $where[] = sprintf('`%s` = :%s', $name, $name);
+                        $where[] = sprintf('sl.`%s` = :%s', $name, $name);
                         $values[$name] = $value;
                         break;
                     case 'like':
-                        $where[] = sprintf('`%s` LIKE :%s', $name, $name);
+                        $name = 'value';
+                        $where[] = sprintf('%s LIKE :%s', 'l.'.'`'.$name.'`', $name);
                         $values[$name] = '%' . $value . '%';
                 }
             }
@@ -77,14 +82,15 @@ class iaSlider extends abstractModuleAdmin
             "LEFT JOIN `{$this->iaDb->prefix}blocks` bl " .
             "ON sl.`position` = bl.`id` " .
             "LEFT JOIN `{$this->iaDb->prefix}language` l " .
-            "ON (l.`key` = CONCAT('block_title_', bl.`id`))" .
+            "ON (l.`key` = CONCAT('slider_name_', sl.`id`))" .
             "WHERE {$where} " .
+            "ORDER BY {$order} ".
             "LIMIT {$start}, {$limit}";
-
         return [
             'data' => $this->iaDb->getAll($sql),
             'total' => (int)$this->iaDb->one(iaDb::STMT_COUNT_ROWS, $where)
         ];
+
     }
 
     public function gridDelete($params, $languagePhraseKey = 'deleted')

@@ -4,9 +4,9 @@
     <summary>This plugin adds an easy way to manage slides on your website</summary>
     <author>Intelliants LLC</author>
     <contributor>Intelliants LLC</contributor>
-    <version>4.1.1</version>
-    <date>2017-06-01</date>
-    <compatibility>4.1</compatibility>
+    <version>4.2.0</version>
+    <date>2018-02-28</date>
+    <compatibility>4.2</compatibility>
 
     <actions>
         <action name="slider_view" url="slider/" icon="list" order="1" pages="slider,slider_config">View</action>

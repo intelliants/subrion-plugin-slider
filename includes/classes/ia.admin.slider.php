@@ -29,7 +29,6 @@ class iaSlider extends abstractModuleAdmin
     protected static $_table = 'slider';
     protected static $_tableBlocks = 'slider_block_options';
 
-
     public static function getTableBlocks()
     {
         return self::$_tableBlocks;
@@ -48,19 +47,21 @@ class iaSlider extends abstractModuleAdmin
         $params || $params = [];
         $start = isset($params['start']) ? (int)$params['start'] : 0;
         $limit = isset($params['limit']) ? (int)$params['limit'] : 15;
-
+        $order = '`' . $params['sort'] . '` ' . $params['dir'];
         $where = $values = [];
+
         foreach ($filterParams as $name => $type) {
             if (isset($params[$name]) && $params[$name]) {
                 $value = iaSanitize::sql($params[$name]);
 
                 switch ($type) {
                     case 'equal':
-                        $where[] = sprintf('`%s` = :%s', $name, $name);
+                        $where[] = sprintf('sl.`%s` = :%s', $name, $name);
                         $values[$name] = $value;
                         break;
                     case 'like':
-                        $where[] = sprintf('`%s` LIKE :%s', $name, $name);
+                        $name = 'value';
+                        $where[] = sprintf('%s LIKE :%s', 'l.'.'`'.$name.'`', $name);
                         $values[$name] = '%' . $value . '%';
                 }
             }
@@ -71,20 +72,32 @@ class iaSlider extends abstractModuleAdmin
         $where = implode(' AND ', $where);
         $this->iaDb->bind($where, $values);
 
-        $sql =
-            "SELECT SQL_CALC_FOUND_ROWS DISTINCTROW sl.*, l.`value` as title, bl.name `position_title`, bl.`position` `slider_position`, bl.`id` as `edit_block`, sl.`id` as `update`, 1 as `delete` " .
-            "FROM `{$this->iaDb->prefix}slider` sl " .
-            "LEFT JOIN `{$this->iaDb->prefix}blocks` bl " .
-            "ON sl.`position` = bl.`id` " .
-            "LEFT JOIN `{$this->iaDb->prefix}language` l " .
-            "ON (l.`key` = CONCAT('block_title_', bl.`id`))" .
-            "WHERE {$where} " .
-            "LIMIT {$start}, {$limit}";
+        $sql = <<<SQL
+SELECT SQL_CALC_FOUND_ROWS DISTINCTROW sl.*, l.`value` as title,
+  bl.name `position_title`, bl.`position` `slider_position`, bl.`id` as `edit_block`, sl.`id` as `update`, 1 as `delete`
+  FROM `:slider_table` sl 
+LEFT JOIN `:prefixblocks` bl 
+  ON sl.`position` = bl.`id` 
+LEFT JOIN `:prefixlanguage` l
+  ON (l.`key` = CONCAT('slider_name_', sl.`id`))
+WHERE :where
+ORDER BY :order
+LIMIT :start, :limit
+SQL;
+        $sql = iaDb::printf($sql, [
+            'prefix' => $this->iaDb->prefix,
+            'slider_table' => $this->getTable(true),
+            'where' => $where,
+            'order' => $order,
+            'start' => $start,
+            'limit' => $limit
+        ]);
 
         return [
             'data' => $this->iaDb->getAll($sql),
             'total' => (int)$this->iaDb->one(iaDb::STMT_COUNT_ROWS, $where)
         ];
+
     }
 
     public function gridDelete($params, $languagePhraseKey = 'deleted')

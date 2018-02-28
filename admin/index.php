@@ -36,13 +36,12 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
             if (isset($_GET['text']) && $_GET['text']) {
                 $stmt = '(`title` LIKE :text OR `body` LIKE :text)';
                 $iaDb->bind($stmt, ['text' => '%' . $_GET['text'] . '%']);
-
                 $params[] = $stmt;
             }
 
             $output = $iaSlider->gridRead($_GET,
                 ['image', 'order', 'status'],
-                ['status' => 'equal'],
+                ['status' => 'equal', 'title' =>'like'],
                 $params
             );
 

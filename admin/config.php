@@ -53,10 +53,10 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
     if ('save_block' == $configAction && $id) {
 
         $options = [
-            'slider_width'   => isset($_GET['slider_width_option']) ? $_GET['slider_width_option'] : $iaCore->get('slider_width_option'),
-            'slider_height'  => isset($_GET['slider_height_option']) ? $_GET['slider_height_option'] : $iaCore->get('slider_height_option'),
-            'slider_thumb_w' => isset($_GET['slider_thumb_w_option']) ? $_GET['slider_thumb_w_option'] : $iaCore->get('slider_thumb_w_option'),
-            'slider_thumb_h' => isset($_GET['slider_thumb_h_option']) ? $_GET['slider_thumb_h_option'] : $iaCore->get('slider_thumb_h_option')
+            'slider_width'   => !empty($_GET['slider_width_option']) ? $_GET['slider_width_option'] : "1200",
+            'slider_height'  => !empty($_GET['slider_height_option']) ? $_GET['slider_height_option'] : "400",
+            'slider_thumb_w' => !empty($_GET['slider_thumb_w_option']) ? $_GET['slider_thumb_w_option'] : "300",
+            'slider_thumb_h' => !empty($_GET['slider_thumb_h_option']) ? $_GET['slider_thumb_h_option'] : "300"
         ];
 
         $fields = [

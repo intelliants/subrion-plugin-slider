@@ -24,10 +24,6 @@ $(function () {
         var params = {action: 'save_block', id: block_id};
 
         params['items_per_slide'] = $('.items_per_slide', block).val();
-        params['slider_width'] = $('.slider_width', block).val();
-        params['slider_height'] = $('.slider_height', block).val();
-        params['slider_thumb_w'] = $('.slider_thumb_w', block).val();
-        params['slider_thumb_h'] = $('.slider_thumb_h', block).val();
         params['slider_direction'] = $('.slider_direction', block).val();
         params['slider_fx'] = $('.slider_fx', block).val();
         params['slider_easing'] = $('.slider_easing', block).val();
@@ -41,6 +37,11 @@ $(function () {
         params['slider_caption'] = $('#slider_caption', block).val();
         params['slider_caption_hover'] = $('#slider_caption_hover', block).val();
         params['slider_custom_url'] = $('#slider_custom_url', block).val();
+
+        params['slider_width_option'] = $('.slider_width_option', block).val();
+        params['slider_height_option'] = $('.slider_height_option', block).val();
+        params['slider_thumb_w_option'] = $('.slider_thumb_w_option', block).val();
+        params['slider_thumb_h_option'] = $('.slider_thumb_h_option', block).val();
 
         $.get(intelli.config.admin_url + '/slider/blocks/edit.json', params,
             function (data) {

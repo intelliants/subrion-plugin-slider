@@ -83,7 +83,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
         iaBreadcrumb::replaceEnd(iaLanguage::get($pageAction . '_slide'), IA_ADMIN_URL . 'slider/' . $pageAction);
 
         $iaDb->setTable('blocks');
-        $sql = "SELECT bl.*, l.`value` as title, COUNT(bn.`id`) as bn_col, opt.`slider_width`, opt.`slider_height` " .
+        $sql = "SELECT bl.*, l.`value` as title, COUNT(bn.`id`) as bn_col " .
             "FROM `{$iaDb->prefix}blocks` as bl " .
             "LEFT JOIN `{$iaDb->prefix}slider_block_options` as opt " .
             "ON bl.`id` = opt.`block_id` " .
@@ -95,6 +95,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             "GROUP BY bl.`id`";
 
         $positions = $iaDb->getAll($sql);
+
         $iaDb->resetTable();
 
         if (!is_array($positions) || empty($positions)) {

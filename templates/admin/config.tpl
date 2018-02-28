@@ -1,4 +1,5 @@
 <div class="wrap-list">
+    {*{_v($blocks_options)}*}
     {foreach $positions as $position name='positions_foreach'}
         <fieldset class="wrap-group" id="position-{$position}">
             <div class="wrap-group-heading">
@@ -16,6 +17,7 @@
                                 </a>
                             </h4>
                             <p><span class="text-small text-muted">{lang key='items_per_slide'}:</span><span class="right"><input class="items_per_slide" type="text" value="{$blocks_options[$block.id].items_per_slide}"></span></p>
+
                             {*<p>*}
                                 {*<span class="text-small text-muted">{lang key='slider_direction'}:</span>*}
                                 {*<span class="right">*}
@@ -26,6 +28,7 @@
                                     {*</select>*}
                                 {*</span>*}
                             {*</p>*}
+
                             <p>
                                 <span class="text-small text-muted">{lang key='slider_fx'}:</span>
                                 <span class="right">
@@ -56,6 +59,11 @@
                             <p><span class="text-small text-muted">{lang key='slider_caption'}:</span><span class="right">{html_radio_switcher value=$blocks_options[$block.id].slider_caption name='slider_caption'}</span></p>
                             <p><span class="text-small text-muted">{lang key='slider_caption_hover'}:</span><span class="right">{html_radio_switcher value=$blocks_options[$block.id].slider_caption_hover name='slider_caption_hover'}</span></p>
                             <p><span class="text-small text-muted">{lang key='slider_custom_url'}:</span><span class="right">{html_radio_switcher value=$blocks_options[$block.id].slider_custom_url name='slider_custom_url'}</span></p>
+                            <p><span class="text-small text-muted">{lang key='slider_width'}:</span><span class="right"><input class="slider_width_option" type="text" value="{$blocks_options[$block.id].slider_width}"></span></p>
+                            <p><span class="text-small text-muted">{lang key='slider_height'}:</span><span class="right"><input class="slider_height_option" type="text" value="{$blocks_options[$block.id].slider_height}"></span></p>
+                            <p><span class="text-small text-muted">{lang key='slider_thumb_w'}:</span><span class="right"><input class="slider_thumb_w_option" type="text" value="{$blocks_options[$block.id].slider_thumb_w}"></span></p>
+                            <p><span class="text-small text-muted">{lang key='slider_thumb_h'}:</span><span class="right"><input class="slider_thumb_h_option" type="text" value="{$blocks_options[$block.id].slider_thumb_h}"></span></p>
+
                             <p class="actions">
                                 <input class="btn btn-sm btn-success save-block" type="button" name="save" value="{lang key='save'}">
                                 <input class="btn btn-sm btn-danger delete-block" type="button" name="delete" value="{lang key='delete'}">

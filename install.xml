@@ -34,11 +34,11 @@
     <config group="slider" type="radio" name="slider_caption_hover" description="Show caption on hover">1</config>
     <config group="slider" type="radio" name="slider_custom_url" description="Open custom URL on click">0</config>
 
-    <config group="slider" type="divider" name="slider_plugin3">Dimensions</config>
-    <config group="slider" type="text" name="slider_width" description="Slider width">1200</config>
-    <config group="slider" type="text" name="slider_height" description="Slider height">400</config>
-    <config group="slider" type="text" name="slider_thumb_w" description="Slide image width">300</config>
-    <config group="slider" type="text" name="slider_thumb_h" description="Slide image height">300</config>
+    <!--<config group="slider" type="divider" name="slider_plugin3">Dimensions</config>-->
+    <!--<config group="slider" type="text" name="slider_width" description="Slider width">1200</config>-->
+    <!--<config group="slider" type="text" name="slider_height" description="Slider height">400</config>-->
+    <!--<config group="slider" type="text" name="slider_thumb_w" description="Slide image width">300</config>-->
+    <!--<config group="slider" type="text" name="slider_thumb_h" description="Slide image height">300</config>-->
 
     <config group="slider" type="divider" name="slider_plugin2">Effects</config>
     <!--<config group="slider" type="select" name="slider_direction" description="Slider direction" values="left,right">left</config>-->
@@ -118,10 +118,6 @@ CREATE TABLE `{prefix}slider_block_options` (
     `id` mediumint(7) unsigned NOT NULL auto_increment,
     `block_id` smallint(5) unsigned NOT NULL,
     `items_per_slide` varchar(5) NOT NULL,
-    `slider_width` varchar(6) NOT NULL,
-    `slider_height` varchar(6) NOT NULL,
-    `slider_thumb_w` varchar(6) NOT NULL,
-    `slider_thumb_h` varchar(6) NOT NULL,
     `slider_direction` varchar(20) NOT NULL,
     `slider_fx` varchar(20) NOT NULL,
     `slider_easing` varchar(20) NOT NULL,
@@ -135,6 +131,7 @@ CREATE TABLE `{prefix}slider_block_options` (
     `slider_caption` tinyint(1) NOT NULL,
     `slider_caption_hover` tinyint(1) NOT NULL,
     `slider_custom_url` tinyint(1) NOT NULL,
+    `options` text NOT NULL,
     PRIMARY KEY (`id`)
 ) {mysql_version};
         ]]>

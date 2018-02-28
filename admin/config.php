@@ -51,12 +51,16 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
     }
 
     if ('save_block' == $configAction && $id) {
+
+        $options = [
+            'slider_width'   => isset($_GET['slider_width_option']) ? $_GET['slider_width_option'] : $iaCore->get('slider_width_option'),
+            'slider_height'  => isset($_GET['slider_height_option']) ? $_GET['slider_height_option'] : $iaCore->get('slider_height_option'),
+            'slider_thumb_w' => isset($_GET['slider_thumb_w_option']) ? $_GET['slider_thumb_w_option'] : $iaCore->get('slider_thumb_w_option'),
+            'slider_thumb_h' => isset($_GET['slider_thumb_h_option']) ? $_GET['slider_thumb_h_option'] : $iaCore->get('slider_thumb_h_option')
+        ];
+
         $fields = [
             'items_per_slide' => isset($_GET['items_per_slide']) ? intval($_GET['items_per_slide']) : $iaCore->get('items_per_slide'),
-            'slider_width' => isset($_GET['slider_width']) ? $_GET['slider_width'] : $iaCore->get('slider_width'),
-            'slider_height' => isset($_GET['slider_height']) ? $_GET['slider_height'] : $iaCore->get('slider_height'),
-            'slider_thumb_w' => isset($_GET['slider_thumb_w']) ? $_GET['slider_thumb_w'] : $iaCore->get('slider_thumb_w'),
-            'slider_thumb_h' => isset($_GET['slider_thumb_h']) ? $_GET['slider_thumb_h'] : $iaCore->get('slider_thumb_h'),
             'slider_direction' => isset($_GET['slider_direction']) ? $_GET['slider_direction'] : $iaCore->get('slider_direction'),
             'slider_fx' => isset($_GET['slider_fx']) ? $_GET['slider_fx'] : $iaCore->get('slider_fx'),
             'slider_easing' => isset($_GET['slider_easing']) ? $_GET['slider_easing'] : $iaCore->get('slider_easing'),
@@ -70,7 +74,9 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
             'slider_caption' => isset($_GET['slider_caption']) ? $_GET['slider_caption'] : $iaCore->get('slider_caption'),
             'slider_caption_hover' => isset($_GET['slider_caption_hover']) ? $_GET['slider_caption_hover'] : $iaCore->get('slider_caption_hover'),
             'slider_custom_url' => isset($_GET['slider_custom_url']) ? $_GET['slider_custom_url'] : $iaCore->get('slider_custom_url'),
-            'block_id' => $id
+            'block_id' => $id,
+            'options' => json_encode($options)
+
         ];
         $iaDb->setTable(iaSlider::getTableBlocks());
         $iaDb->update($fields, "`block_id` = '$id'");
@@ -105,6 +111,13 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     if ('add_block' == $configAction && $position) {
         $iaBlock = $iaCore->factory('block', iaCore::ADMIN);
 
+        $options = [
+            'slider_width'   => "1200",
+            'slider_height'  => "400",
+            'slider_thumb_w' => "300",
+            'slider_thumb_h' => "300"
+        ];
+
         $block = [
             'name' => 'slider_block_' . $position . '_' . $num,
             'position' => $position,
@@ -123,10 +136,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
         $fields = [
             'items_per_slide' => $iaCore->get('items_per_slide'),
-            'slider_width' => $iaCore->get('slider_width'),
-            'slider_height' => $iaCore->get('slider_height'),
-            'slider_thumb_w' => $iaCore->get('slider_thumb_w'),
-            'slider_thumb_h' => $iaCore->get('slider_thumb_h'),
             'slider_direction' => $iaCore->get('slider_direction'),
             'slider_fx' => $iaCore->get('slider_fx'),
             'slider_easing' => $iaCore->get('slider_easing'),
@@ -140,7 +149,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             'slider_caption' => $iaCore->get('slider_caption'),
             'slider_caption_hover' => $iaCore->get('slider_caption_hover'),
             'slider_custom_url' => $iaCore->get('slider_custom_url'),
-            'block_id' => $id
+            'block_id' => $id,
+            'options'=>json_encode($options)
         ];
 
         $iaDb->setTable(iaSlider::getTableBlocks());
@@ -182,11 +192,16 @@ SQL;
 
     $iaDb->setTable(iaSlider::getTableBlocks());
     $options = $iaDb->all(iaDb::ALL_COLUMNS_SELECTION);
+
     $iaDb->resetTable();
 
     $blockOptions = [];
     foreach ($options as $option) {
+        $option_list[$option['block_id']] = json_decode($option['options'], true);
+
         $blockOptions[$option['block_id']] = $option;
+        unset($blockOptions[$option['block_id']]['options']);
+        $blockOptions[$option['block_id']] = array_merge ($blockOptions[$option['block_id']] , $option_list[$option['block_id']]);
     }
 
     $iaView->assign('blocks_options', $blockOptions);

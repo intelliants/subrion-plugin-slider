@@ -1,7 +1,7 @@
 .b-slider {
 	position: relative;
-	z-index: 4000;
-}
+	z-index: 999;
+} 
 
 .b-slider__slides {
 	margin: 0; padding: 0; list-style: none;

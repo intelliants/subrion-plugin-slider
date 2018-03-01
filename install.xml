@@ -34,23 +34,31 @@
     <config group="slider" type="radio" name="slider_caption_hover" description="Show caption on hover">1</config>
     <config group="slider" type="radio" name="slider_custom_url" description="Open custom URL on click">0</config>
 
-    <config group="slider" type="divider" name="slider_plugin3">Dimensions</config>
-    <config group="slider" type="text" name="slider_width" description="Slider width">1200</config>
-    <config group="slider" type="text" name="slider_height" description="Slider height">400</config>
-    <config group="slider" type="text" name="slider_thumb_w" description="Slide image width">300</config>
-    <config group="slider" type="text" name="slider_thumb_h" description="Slide image height">300</config>
+    <!--<config group="slider" type="divider" name="slider_plugin3">Dimensions</config>-->
+    <!--<config group="slider" type="text" name="slider_width" description="Slider width">1200</config>-->
+    <!--<config group="slider" type="text" name="slider_height" description="Slider height">400</config>-->
+    <!--<config group="slider" type="text" name="slider_thumb_w" description="Slide image width">300</config>-->
+    <!--<config group="slider" type="text" name="slider_thumb_h" description="Slide image height">300</config>-->
 
     <config group="slider" type="divider" name="slider_plugin2">Effects</config>
-    <config group="slider" type="select" name="slider_direction" description="Slider direction" values="left,right">left</config>
-    <config group="slider" type="select" name="slider_fx" description="Slider FX" values="scroll,directscroll,fade,crossfade,cover,cover-fade,uncover,uncover-fade">scroll</config>
-    <config group="slider" type="select" name="slider_easing" description="Slider easing" values="linear,swing,quadratic,cubic,elastic">linear</config>
-    <config group="slider" type="text" name="slider_scroll_duration" description="Slider scroll duration">500</config>
+    <!--<config group="slider" type="select" name="slider_direction" description="Slider direction" values="left,right">left</config>-->
+    <!--<config group="slider" type="select" name="slider_easing" description="Slider easing" values="linear,swing,quadratic,cubic,elastic">linear</config>-->
+    <!--<config group="slider" type="text" name="slider_scroll_duration" description="Slider scroll duration">500</config>-->
+    <config group="slider" type="select" name="slider_fx" description="Slider FX" values="bounce,fade,rotate,roll,zoom">fade</config>
+    <config group="slider" type="text" name="slider_autoplay_timeout" description="Autoplay interval timeout">2000</config>
+    <config group="slider" type="radio" name="slider_autoplay" description="Autoplay">1</config>
+    <config group="slider" type="radio" name="slider_loop" description="Infinity loop. Duplicate last and first items to get loop illusion">1</config>
+    <config group="slider" type="text" name="slider_margin" description="Margin-right(px) on item">20</config>
 
     <phrases>
         <phrase category="admin" key="add_slide_notification"><![CDATA[Please make sure the slider is <a href=":slider_config_url">configured</a> properly and images you are going to upload have the same width and height. Otherwise it may cause undesirable problems.]]></phrase>
         <phrase category="admin" key="are_you_sure_to_delete_selected_slide">Are you sure you want to delete this slide?</phrase>
         <phrase category="admin" key="are_you_sure_to_delete_selected_slides">Are you sure you want to delete these slides?</phrase>
         <phrase category="admin" key="add_slider_block">Add block</phrase>
+        <phrase category="admin" key="slider_autoplay_timeout">Autoplay interval timeout</phrase>
+        <phrase category="admin" key="slider_autoplay">Autoplay</phrase>
+        <phrase category="admin" key="slider_loop">Infinity loop. Duplicate last and first items to get loop illusion</phrase>
+        <phrase category="admin" key="slider_margin">Margin-right(px) on item</phrase>
         <phrase category="admin" key="edit_slide">Edit Slide</phrase>
         <phrase category="admin" key="items_per_slide">Items per slide</phrase>
         <phrase category="admin" key="name_is_empty_for">Name field is empty for: </phrase>
@@ -84,6 +92,7 @@
         <tooltip key="slider_scroll_duration"><![CDATA[Determines the duration of the transition in milliseconds.]]></tooltip>
     </tooltips>
 
+
     <hooks>
         <hook name="phpCoreBeforePageDisplay" filename="hook.slider.php" page_type="front"><![CDATA[]]></hook>
     </hooks>
@@ -109,19 +118,20 @@ CREATE TABLE `{prefix}slider_block_options` (
     `id` mediumint(7) unsigned NOT NULL auto_increment,
     `block_id` smallint(5) unsigned NOT NULL,
     `items_per_slide` varchar(5) NOT NULL,
-    `slider_width` varchar(6) NOT NULL,
-    `slider_height` varchar(6) NOT NULL,
-    `slider_thumb_w` varchar(6) NOT NULL,
-    `slider_thumb_h` varchar(6) NOT NULL,
     `slider_direction` varchar(20) NOT NULL,
     `slider_fx` varchar(20) NOT NULL,
     `slider_easing` varchar(20) NOT NULL,
     `slider_scroll_duration` varchar(6) NOT NULL,
+    `slider_autoplay_timeout` varchar(6) NOT NULL,
+    `slider_margin` varchar(6) NOT NULL,
     `slider_direction_nav` tinyint(1) NOT NULL,
+    `slider_autoplay` tinyint(1) NOT NULL,
+    `slider_loop` tinyint(1) NOT NULL,
     `slider_pagination_nav` tinyint(1) NOT NULL,
     `slider_caption` tinyint(1) NOT NULL,
     `slider_caption_hover` tinyint(1) NOT NULL,
     `slider_custom_url` tinyint(1) NOT NULL,
+    `options` text NOT NULL,
     PRIMARY KEY (`id`)
 ) {mysql_version};
         ]]>

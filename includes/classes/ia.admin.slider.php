@@ -29,6 +29,7 @@ class iaSlider extends abstractModuleAdmin
     protected static $_table = 'slider';
     protected static $_tableBlocks = 'slider_block_options';
 
+
     public static function getTableBlocks()
     {
         return self::$_tableBlocks;
@@ -93,6 +94,7 @@ SQL;
             'limit' => $limit
         ]);
 
+
         return [
             'data' => $this->iaDb->getAll($sql),
             'total' => (int)$this->iaDb->one(iaDb::STMT_COUNT_ROWS, $where)
@@ -133,16 +135,45 @@ SQL;
 
     private function _updateImage(&$itemData)
     {
+        $sql = <<<SQL
+SELECT bl.*, l.`value` as title, COUNT(bn.`id`) as bn_col, opt.`options` as `options`
+            FROM `:prefixblocks` as bl 
+            LEFT JOIN `:prefixslider_block_options` as opt 
+            ON bl.`id` = opt.`block_id` 
+            LEFT JOIN `:prefixslider` as bn 
+            ON bn.`position` = bl.`id`
+            LEFT JOIN `:prefixlanguage` l 
+            ON (l.`key` = CONCAT('block_title_', bl.`id`)) 
+            WHERE bl.`module` = 'slider' 
+            GROUP BY bl.`id`
+SQL;
+
+        $sql = iaDb::printf($sql, [
+            'prefix' => $this->iaDb->prefix,
+            'slider_table' => $this->getTable(true)
+        ]);
+
+        $options = $this->iaDb->getAll($sql);
+
+        $blockOptions = [];
+        foreach ($options as $key => $value) {
+            $option_list = json_decode($value['options'], true);
+            $blockOptions = $value;
+            unset($blockOptions['options']);
+            $blockOptions= array_merge ($blockOptions, $option_list);
+        }
+
+
         if (isset($_FILES['image']['error']) && !$_FILES['image']['error']) {
             $iaField = $this->iaCore->factory('field');
             $iaPicture = $this->iaCore->factory('picture');
 
             $field = [
                 'type' => $iaField::IMAGE,
-                'thumb_width' => $this->iaCore->get('slider_thumb_w'),
-                'thumb_height' => $this->iaCore->get('slider_thumb_h'),
-                'image_width' => $this->iaCore->get('slider_width'),
-                'image_height' => $this->iaCore->get('slider_height'),
+                'thumb_width' => $blockOptions['slider_thumb_w'],
+                'thumb_height' => $blockOptions['slider_thumb_h'],
+                'image_width' => $blockOptions['slider_width'],
+                'image_height' => $blockOptions['slider_height'],
                 'resize_mode' => $iaPicture::CROP,
                 'folder_name' => 'slides',
                 'file_prefix' => 'slide_'

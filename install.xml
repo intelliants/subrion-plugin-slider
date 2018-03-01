@@ -5,8 +5,8 @@
     <author>Intelliants LLC</author>
     <contributor>Intelliants LLC</contributor>
     <version>4.2.0</version>
-    <date>2017-06-01</date>
-    <compatibility>4.1</compatibility>
+    <date>2018-02-28</date>
+    <compatibility>4.2</compatibility>
 
     <actions>
         <action name="slider_view" url="slider/" icon="list" order="1" pages="slider,slider_config">View</action>

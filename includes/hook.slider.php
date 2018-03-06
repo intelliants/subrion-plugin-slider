@@ -35,4 +35,9 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
     // include custom css
     $iaView->add_css('_IA_URL_modules/slider/templates/front/css/style');
+    $iaView->add_css('_IA_URL_modules/slider/templates/front/css/owl.carousel.min');
+
+    $iaView->add_css('_IA_URL_modules/slider/templates/front/css/owl.theme.default.min');
+    $iaView->add_css('_IA_URL_modules/slider/templates/front/css/animate.min');
+
 }

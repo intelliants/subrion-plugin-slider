@@ -128,7 +128,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             'sticky' => 1,
             'title' => $title,
             'external' => 1,
-            'filename' => 'extra:slider/block.slider',
+            'filename' => 'module:slider/block.slider.tpl',
             'module' => 'slider'
         ];
 

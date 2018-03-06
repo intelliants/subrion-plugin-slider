@@ -15,9 +15,6 @@
         </div>
     </div>
 
-    {ia_print_css files='_IA_URL_modules/slider/templates/front/css/owl.carousel.min'}
-    {ia_print_css files='_IA_URL_modules/slider/templates/front/css/owl.theme.default.min'}
-    {ia_print_css files='_IA_URL_modules/slider/templates/front/css/animate.min'}
     {ia_print_js files='_IA_URL_modules/slider/js/front/owl.carousel.min'}
 
     {ia_add_js}

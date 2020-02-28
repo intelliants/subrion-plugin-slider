@@ -174,12 +174,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
             if (iaCore::ACTION_EDIT == $pageAction && !$error) {
                 $slides['id'] = $id;
-                $result = $iaSlider->update($slides, $slides['id']);
-                $error = (0 === $result || $result) ? false : true;
+                $error = !$iaSlider->update($slides, $slides['id']);
                 $messages[] = ($error) ? iaLanguage::get('db_error') : iaLanguage::get('saved');
             } elseif (!$error) {
-                $result = $id = $iaSlider->insert($slides);
-                $error = ($result) ? false : true;
+                $id = $iaSlider->insert($slides);
+                $error = !$id;
                 $messages[] = ($error) ? iaLanguage::get('db_error') : iaLanguage::get('slide_added');
             }
 
